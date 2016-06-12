@@ -18,3 +18,5 @@ This library is a simple wrapper for the API provided by [The BlackBox](http://t
 
 	The Session structure has a flag "DevMode", with this set true all calls 
 	will not generate side effects.
+	
+[![GoDoc](https://godoc.org/github.com/germ/go-blackbox?status.svg)](https://godoc.org/github.com/germ/go-blackbox)
