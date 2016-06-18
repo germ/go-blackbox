@@ -4,6 +4,7 @@
 
 This library is a simple wrapper for the API provided by [The BlackBox](http://theblackbox.tk), API keys can be obtained from http://theblackbox.tk/api or by using the included developer credentials.
 
+Note: The functionality allowing inspection/wrapping of existing io.Readers is experimental, tread carefully
  General usage:
 	Using your ID make a call to create or info, this will return a 
 	struct with the session ID/all sessions.
@@ -19,4 +20,3 @@ This library is a simple wrapper for the API provided by [The BlackBox](http://t
 
 	The Session structure has a flag "DevMode", with this set true all calls 
 	will not generate side effects.
-	
