@@ -2,6 +2,7 @@ package blackbox
 
 import (
 	"bytes"
+	"io/ioutil"
 	"testing"
 )
 
@@ -94,8 +95,16 @@ func TestInfo(t *testing.T) {
 	t.Log(s, err)
 }
 
+func TestAttach(t *testing.T) {
+	readone := TestCreds.Attach(bytes.NewBufferString(TestData[:30]))
+
+	data, _ := ioutil.ReadAll(readone)
+	t.Log("One: ", string(data))
+}
+
 func TestFinal(t *testing.T) {
 	t.Log("Final Test")
 	err := TestCreds.Finalize(10 * 100)
 	t.Log(err)
 }
+

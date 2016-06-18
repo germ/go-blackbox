@@ -43,6 +43,8 @@ type Session struct {
 				// or charge works. Keep set to true until program is functional!
 				// If a work is submitted apparently unintentionally, I will not approve it
 	Sessions  []string	// A list of all session tied to account
+
+	intercept io.ReadWriter	// optional intercept/relay mech
 }
 
 type Request struct {
@@ -60,8 +62,7 @@ type Response struct {
 	Sessions []string // List of all session
 }
 
-var baseURL = "http://localhost:8080/api"
-//var baseURL 	= "https://theblackbox.tk/api?id=%v
+var baseURL 	= "https://theblackbox.tk/api"
 
 func Info(auth string) (s Session, err error) {
 	// Fetch new session ID
@@ -107,8 +108,8 @@ func Create(auth string) (s Session, err error) {
 }
 
 // Submit for approval
-// payment: USD to be paid for work, in cents
-//	$10.50 = 1050
+// payment: USD to be paid for work
+// Finalize(100.00)
 func (s *Session) Finalize(payment int) (err error) {
 	// Construct and fetch response
 	path := fmt.Sprintf("%v?action=finalize&pay=%v&id=%v&session=%v", baseURL, payment, s.UID, s.Session)
@@ -190,6 +191,20 @@ func (s *Session) Upload(r io.Reader) (err error) {
 		return
 	}
 
+	return
+}
+
+// Attach clones input from alice returning it through bob while
+// feeding data to Upload. 
+// This is *experimental* and simply wraps calls to Upload, in most situations
+// Use of Upload is recommended.
+func (s *Session) Attach(alice io.Reader) (bob io.Reader) {
+	s.intercept = new(bytes.Buffer)
+	bob = io.TeeReader(alice, s.intercept)
+
+	go func() {
+		s.Upload(s.intercept)
+	}()
 	return
 }
 
