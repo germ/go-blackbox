@@ -36,6 +36,10 @@ var DevCreds = Session{
 	DevMode: true,
 }
 
+// This structure contains the needed data for 
+// Info(auth) will return a filled struct using data from 
+// the server. If UID & Session are manually set, all ops should
+// complete
 type Session struct {
 	UID     string		// Your personal ID generated from theblackbox
 	Session string		// The name of the current project
@@ -46,12 +50,14 @@ type Session struct {
 
 }
 
+// Internal use for communicating with server
 type Request struct {
 	Action  	string
 	ID      	string
 	Session 	string
 }
 
+// Internal use for communicating with server
 type Response struct {
 	Success bool   // Status of request
 	Error   string // Error for request
