@@ -2,6 +2,7 @@ package blackbox
 
 import (
 	"bytes"
+	"time"
 	"io/ioutil"
 	"testing"
 )
@@ -100,6 +101,15 @@ func TestAttach(t *testing.T) {
 
 	data, _ := ioutil.ReadAll(readone)
 	t.Log("One: ", string(data))
+	time.Sleep(time.Second * 3)
+}
+
+func TestAttachPkg(t *testing.T) {
+	readone := Attach(bytes.NewBufferString(TestData[:30]), TestCreds.UID)
+
+	data, _ := ioutil.ReadAll(readone)
+	t.Log("One: ", string(data))
+	time.Sleep(time.Second * 3)
 }
 
 func TestFinal(t *testing.T) {

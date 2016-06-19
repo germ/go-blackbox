@@ -44,7 +44,6 @@ type Session struct {
 				// If a work is submitted apparently unintentionally, I will not approve it
 	Sessions  []string	// A list of all session tied to account
 
-	intercept io.ReadWriter	// optional intercept/relay mech
 }
 
 type Request struct {
@@ -199,13 +198,29 @@ func (s *Session) Upload(r io.Reader) (err error) {
 // This is *experimental* and simply wraps calls to Upload, in most situations
 // Use of Upload is recommended.
 func (s *Session) Attach(alice io.Reader) (bob io.Reader) {
-	s.intercept = new(bytes.Buffer)
-	bob = io.TeeReader(alice, s.intercept)
+	lahey := new(bytes.Buffer)
+	bob = io.TeeReader(alice, lahey)
 
 	go func() {
-		s.Upload(s.intercept)
+		s.Upload(lahey)
 	}()
 	return
+}
+
+// Attach clones input from alice returning it through bob while
+// feeding data to Upload. 
+// Attach is a convenience wrapper for Session.Attach
+// This function does not require an existing Session and places
+// data into the first avalible session for a given user.
+func Attach(alice io.Reader, auth string) (bob io.Reader) {
+	s, err := Info(auth)
+	if err != nil || len(s.Sessions) == 0 {
+		//Can't error, might as well give you the reader back
+		return alice 
+	}
+	
+	s.Session = s.Sessions[0]
+	return s.Attach(alice)
 }
 
 func fetch(url string) (r Response, err error) {
