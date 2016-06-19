@@ -114,7 +114,7 @@ func Create(auth string) (s Session, err error) {
 
 // Submit for approval
 // payment: USD to be paid for work
-// Finalize(100.00)
+// Finalize(100.00) -> Stripe Charge for 100 USD (after human approval)
 func (s *Session) Finalize(payment int) (err error) {
 	// Construct and fetch response
 	path := fmt.Sprintf("%v?action=finalize&pay=%v&id=%v&session=%v", baseURL, payment, s.UID, s.Session)
@@ -135,7 +135,7 @@ func (s *Session) Finalize(payment int) (err error) {
 }
 
 // Upload r once drained to BB
-// Ensure r is NOT A STREAM
+// Ensure r terminates
 func (s *Session) Upload(r io.Reader) (err error) {
 	// Construct URL
 	path := fmt.Sprintf("%v?session=%v&id=%v", baseURL, s.Session, s.UID)
