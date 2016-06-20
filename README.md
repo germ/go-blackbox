@@ -4,7 +4,8 @@
 
 This library is a simple wrapper for the API provided by [The BlackBox](http://theblackbox.tk), API keys can be obtained from http://theblackbox.tk/api or by using the included developer credentials.
 
-Note: The functionality allowing inspection/wrapping of existing io.Readers is experimental, tread carefully
+Note: The functionality allowing inspection/wrapping of existing io.Readers is experimental, tread carefully.
+In addition, payment processing via Stripe is in test mode. Use card # 4242 4242 4242 4242 to test charges
 
  General usage:
 	Using your ID make a call to create or info, this will return a 
